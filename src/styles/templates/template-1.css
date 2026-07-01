@@ -1,0 +1,270 @@
+/* Template 1 — styling khusus untuk template ini saja.
+   Diaktifkan lewat class .template-1 yang dipasang di wrapper card undangan
+   (EditorPage.jsx) berdasarkan template_id invitation yang aktif.
+   Jangan campur dengan template lain di file ini — tiap template punya
+   file CSS sendiri supaya mudah di-maintain walau jumlah template bertambah. */
+
+   .template-1 {
+    /* Warna */
+    --inv-bg-primary: #fffbeb;   /* amber-50, placeholder — ganti sesuai desain final */
+    --inv-text-primary: #6b7280; /* gray-500 */
+    --inv-text-heading: #111827; /* gray-900 */
+    --inv-accent: #b45309;       /* amber-700 */
+    --inv-accent-text: #ffffff;
+  
+    /* Bentuk */
+    --inv-image-radius: 8px; /* foto cover, foto mempelai, dst */
+  
+    /* Area kiri-kanan (di luar konten yang dibatasi max-width) — placeholder
+       warna dulu, nanti diganti ornamen/background-image sungguhan. */
+    --inv-hero-side-bg: #fde68a; /* amber-200, sengaja beda dari --inv-bg-primary supaya kelihatan jelas batasnya */
+    --inv-hero-side-image: none; /* GANTI ke url("https://...") begitu gambar sudah di-upload */
+  }
+  
+  /* === Animasi ornamen khusus Template 1 === */
+  /* Pola: definisikan keyframe di sini, lalu pasang class-nya di elemen
+     ornamen lewat komponen section (mis. <img className="template-1-ornament-fade">).
+     Kalau ornamen butuh animasi berbeda (slide, bounce, dst), tambah keyframe
+     baru di bawah ini dengan nama yang jelas. */
+  
+  @keyframes template1-ornament-fade {
+    from {
+      opacity: 0;
+      transform: translateY(-12px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .template-1-ornament-fade {
+    animation: template1-ornament-fade 0.8s ease-out forwards;
+  }
+  
+  /* === Hero Section === */
+  
+  .template-1 .invitation-hero {
+    background-color: var(--inv-hero-side-bg); /* fallback kalau gambar gagal load */
+    background-image: var(--inv-hero-side-image);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  
+  .template-1 .invitation-hero-content {
+    background-color: var(--inv-bg-primary);
+  }
+  
+  .template-1 .invitation-hero-image {
+    border-radius: var(--inv-image-radius);
+  }
+  
+  .template-1 .invitation-hero-label {
+    color: var(--inv-text-primary);
+  }
+  
+  .template-1 .invitation-hero-title {
+    color: var(--inv-text-heading);
+  }
+  
+  .template-1 .invitation-hero-recipient {
+    color: var(--inv-text-heading);
+  }
+  
+  .template-1 .invitation-hero-guest-name {
+    color: var(--inv-text-heading);
+  }
+  
+  .template-1 .invitation-hero-disclaimer {
+    color: var(--inv-text-primary);
+  }
+  
+  .template-1 .invitation-hero-button {
+    background-color: var(--inv-accent);
+    color: var(--inv-accent-text);
+  }
+  
+  /* === Opening Section === */
+  
+  .template-1 .invitation-opening-label {
+    color: var(--inv-text-primary);
+  }
+  
+  .template-1 .invitation-opening-title {
+    color: var(--inv-text-heading);
+  }
+  
+  .template-1 .invitation-opening-tagline {
+    color: var(--inv-accent);
+  }
+  
+  .template-1 .invitation-opening-date {
+    color: var(--inv-text-heading);
+  }
+  
+  /* === Couple Section === */
+  
+  .template-1 .invitation-couple-image {
+    border-radius: 9999px; /* tetap bundar, tidak ikut --inv-image-radius karena beda konteks dari foto cover */
+  }
+  
+  .template-1 .invitation-couple-name {
+    color: var(--inv-text-heading);
+  }
+  
+  .template-1 .invitation-couple-link {
+    color: var(--inv-accent);
+  }
+  
+  /* === Quote Section === */
+  
+  .template-1 .invitation-quote {
+    background-color: var(--inv-bg-primary);
+  }
+  
+  .template-1 .invitation-quote-title {
+    color: var(--inv-text-heading);
+  }
+  
+  .template-1 .invitation-quote-image {
+    border-radius: 9999px;
+  }
+  
+  .template-1 .invitation-quote-content {
+    color: var(--inv-text-primary);
+  }
+  
+  /* === Countdown Section === */
+  
+  .template-1 .invitation-countdown {
+    background-color: var(--inv-bg-primary);
+  }
+  
+  .template-1 .invitation-countdown-image {
+    border-radius: var(--inv-image-radius);
+  }
+  
+  .template-1 .invitation-countdown-title {
+    color: var(--inv-text-heading);
+  }
+  
+  .template-1 .invitation-countdown-finished {
+    color: var(--inv-accent);
+  }
+  
+  .template-1 .invitation-countdown-unit {
+    background-color: #ffffff;
+    border-radius: var(--inv-image-radius);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .template-1 .invitation-countdown-unit-label {
+    color: var(--inv-text-primary);
+  }
+  
+  .template-1 .invitation-countdown-content {
+    color: var(--inv-text-primary);
+  }
+  
+  .template-1 .invitation-countdown-button {
+    background-color: var(--inv-accent);
+    color: var(--inv-accent-text);
+  }
+  
+  /* === Event Section === */
+  
+  .template-1 .invitation-event-name {
+    color: var(--inv-text-heading);
+  }
+  
+  .template-1 .invitation-event-date {
+    color: var(--inv-text-primary);
+  }
+  
+  .template-1 .invitation-event-location {
+    color: var(--inv-text-heading);
+  }
+  
+  .template-1 .invitation-event-button {
+    border: 1px solid var(--inv-accent);
+    color: var(--inv-accent);
+  }
+  
+  /* === Story Section === */
+  
+  .template-1 .invitation-story-title {
+    color: var(--inv-text-heading);
+  }
+  
+  .template-1 .invitation-story-item {
+    border-left: 2px solid var(--inv-accent);
+  }
+  
+  .template-1 .invitation-story-image {
+    border-radius: var(--inv-image-radius);
+  }
+  
+  .template-1 .invitation-story-date {
+    color: var(--inv-text-primary);
+  }
+  
+  .template-1 .invitation-story-item-title {
+    color: var(--inv-text-heading);
+  }
+  
+  .template-1 .invitation-story-content {
+    color: var(--inv-text-primary);
+  }
+  
+  /* === Gallery Section === */
+  
+  .template-1 .invitation-gallery-title {
+    color: var(--inv-text-heading);
+  }
+  
+  .template-1 .invitation-gallery-image {
+    border-radius: 4px;
+  }
+  
+  /* === Pray Section === */
+  
+  .template-1 .invitation-pray {
+    background-color: var(--inv-bg-primary);
+  }
+  
+  .template-1 .invitation-pray-title {
+    color: var(--inv-text-heading);
+  }
+  
+  .template-1 .invitation-pray-content {
+    color: var(--inv-text-primary);
+  }
+  
+  /* === Invite Section === */
+  
+  .template-1 .invitation-invite-title {
+    color: var(--inv-text-heading);
+  }
+  
+  .template-1 .invitation-invite-content {
+    color: var(--inv-text-primary);
+  }
+  
+  /* === Footer Section === */
+  
+  .template-1 .invitation-footer {
+    background-color: var(--inv-bg-primary);
+  }
+  
+  .template-1 .invitation-footer-image {
+    border-radius: var(--inv-image-radius);
+  }
+  
+  .template-1 .invitation-footer-content {
+    color: var(--inv-text-primary);
+  }
+  
+  .template-1 .invitation-footer-title {
+    color: var(--inv-text-heading);
+  }

@@ -1,0 +1,24 @@
+/* Template 2 — isi nanti begitu desain template ini sudah ditentukan.
+   Selama kosong, invitation dengan template_id="template-2" akan fallback
+   ke DEFAULT_TEMPLATE_ID (lihat src/data/templateAssets.js), jadi tidak
+   wajib diisi sekarang. */
+
+.template-2 {
+  --inv-bg-primary: #fce7f3;   /* contoh: pink-50 */
+  --inv-text-primary: #6b7280;
+  --inv-text-heading: #111827;
+  --inv-accent: #2318be;       /* contoh: pink-700 */
+  --inv-accent-text: #ffffff;
+
+  --inv-image-radius: 50px; /* contoh sesuai permintaan: radius lebih besar dari Template-1 */
+}
+
+/* === Couple Section === */
+/* Demonstrasi: foto mempelai Template-2 kotak (radius kecil), beda dari
+   Template-1 yang bundar penuh — tinggal override class yang sama. */
+.template-2 .invitation-couple-image {
+  border-radius: 30px;
+}
+
+/* === Animasi ornamen khusus Template 2 === */
+/* Tambah @keyframes dan class animasi di sini begitu desain siap. */
