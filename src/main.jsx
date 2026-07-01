@@ -7,6 +7,8 @@ import LoginPage from "./pages/LoginPage";
 import DashboardPage from "./pages/DashboardPage";
 import EditorPage from "./pages/EditorPage";
 import PublicInvitationPage from "./pages/PublicInvitationPage";
+import RegisterPage from "./pages/RegisterPage";
+import PaymentResultPage from "./pages/PaymentResultPage";
 import "./index.css";
 import "./styles/templates/template-1.css";
 import "./styles/templates/template-2.css";
@@ -18,6 +20,10 @@ createRoot(document.getElementById("root")).render(
       <AuthProvider>
         <Routes>
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/payment/success" element={<PaymentResultPage status="success" />} />
+          <Route path="/payment/pending" element={<PaymentResultPage status="pending" />} />
+          <Route path="/payment/failed" element={<PaymentResultPage status="failed" />} />
 
           <Route
             path="/dashboard"
@@ -37,12 +43,7 @@ createRoot(document.getElementById("root")).render(
             }
           />
 
-          {/* Halaman publik — TIDAK dibungkus ProtectedRoute, siapa saja bisa akses
-              tanpa login. Akses sebenarnya tetap dibatasi oleh RLS Supabase
-              (hanya invitation dengan status='published' yang bisa di-query). */}
           <Route path="/u/:slug" element={<PublicInvitationPage />} />
-
-          {/* Default: arahkan ke dashboard (ProtectedRoute akan redirect ke /login kalau belum auth) */}
           <Route path="/" element={<Navigate to="/dashboard" replace />} />
         </Routes>
       </AuthProvider>
