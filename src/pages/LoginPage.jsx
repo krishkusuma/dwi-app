@@ -52,7 +52,7 @@ export default function LoginPage() {
                 onClick={() => navigate("/forgot-password")}
                 className="text-xs text-amber-700 underline"
               >
-                Lupa password?
+                Lupa password kamu?
               </button>
             </div>
             <input
