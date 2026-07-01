@@ -45,7 +45,16 @@ export default function LoginPage() {
           </div>
 
           <div className="mb-4">
-            <label className="block text-sm mb-1">Password</label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-sm">Password</label>
+              <button
+                type="button"
+                onClick={() => navigate("/forgot-password")}
+                className="text-xs text-amber-700 underline"
+              >
+                Lupa password?
+              </button>
+            </div>
             <input
               type="password"
               required
