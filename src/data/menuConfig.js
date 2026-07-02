@@ -15,4 +15,6 @@ export const standardMenuSections = [
 
 export const premiumMenuSections = [
   { value: "gift", label: "Wedding Gift" },
+  { value: "rsvp", label: "RSVP" },
+  { value: "wish", label: "Wedding Wishes" },
 ];

@@ -18,6 +18,8 @@ import PraySection from "../components/sections/template-1/PraySection";
 import InviteSection from "../components/sections/template-1/InviteSection";
 import FooterSection from "../components/sections/template-1/FooterSection";
 import WeddingGiftSection from "../components/sections/template-1/WeddingGiftSection";
+import RsvpSection from "../components/sections/template-1/RsvpSection";
+import WishSection from "../components/sections/template-1/WishSection";
 import StickyMusic from "../components/StickyMusic";
 import BottomNav from "../components/BottomNav";
 import { templateConfig } from "../data/templateConfig";
@@ -38,6 +40,8 @@ import {
   footerFields, footerDefaultData,
   wgSettingsFields, wgAccountItemFields, wgDefaultData,
   generalFields, generalDefaultData,
+  rsvpFields, rsvpDefaultData,
+  wishFields, wishDefaultData,
 } from "../data/schemas";
 
 // Pemetaan dari "value" dropdown ke id elemen section di preview,
@@ -52,6 +56,8 @@ const SECTION_SCROLL_TARGETS = {
   galeri: "gallery-section",
   penutup: "pray-section",
   gift: "wedding-gift-section",
+  rsvp: "rsvp-section",
+  wish: "wish-section",
 };
 
 export default function EditorPage() {
@@ -72,6 +78,8 @@ export default function EditorPage() {
     footer: footerDefaultData,
     general: generalDefaultData,
     weddingGift: wgDefaultData,
+    rsvp: rsvpDefaultData,
+    wish: wishDefaultData,
   });
   const [loading, setLoading] = useState(true);
   const [templateId, setTemplateId] = useState(DEFAULT_TEMPLATE_ID);
@@ -194,6 +202,8 @@ export default function EditorPage() {
           footer: { ...prev.footer, ...result.data.footer },
           general: { ...prev.general, ...result.data.general },
           weddingGift: { ...prev.weddingGift, ...result.data.weddingGift },
+          rsvp: { ...prev.rsvp, ...result.data.rsvp },
+          wish: { ...prev.wish, ...result.data.wish },
         }));
       }
       setLoading(false);
@@ -472,6 +482,41 @@ export default function EditorPage() {
               ))}
             </>
           )}
+
+          {activeSection === "rsvp" && (
+            <>
+              <h4 className="mb-4 font-medium">RSVP</h4>
+              {rsvpFields.map((field) => (
+                <FieldRenderer
+                  key={field.key}
+                  field={field}
+                  value={data.rsvp[field.key]}
+                  onChange={(key, value) => handleChange("rsvp", key, value)}
+                />
+              ))}
+              <p className="text-xs text-gray-500 mt-2">
+                Daftar tamu yang sudah konfirmasi bisa dilihat di Dashboard.
+              </p>
+            </>
+          )}
+
+          {activeSection === "wish" && (
+            <>
+              <h4 className="mb-4 font-medium">Wedding Wishes</h4>
+              {wishFields.map((field) => (
+                <FieldRenderer
+                  key={field.key}
+                  field={field}
+                  value={data.wish[field.key]}
+                  onChange={(key, value) => handleChange("wish", key, value)}
+                />
+              ))}
+              <p className="text-xs text-gray-500 mt-2">
+                Ucapan baru masuk sebagai draft dan perlu di-approve dulu di Dashboard
+                sebelum tampil ke publik.
+              </p>
+            </>
+          )}
         </div>
       )}
 
@@ -546,9 +591,9 @@ export default function EditorPage() {
 
         <div className="relative flex justify-center bg-gray-100 min-h-screen">
           {/* Catatan: Section A (background desktopImage, hidden di mobile) SENGAJA
-              tidak dirender di EditorPage sama sekali — ini eksklusif hanya untuk halaman
-              publik saja nanti (lihat tahap Publishing), karena posisinya cuma masuk akal
-              kalau tidak ada kolom Editor di sebelahnya.*/}
+              tidak dirender di EditorPage sama sekali — ini eksklusif untuk halaman
+              publik nanti (lihat tahap Publishing), karena posisinya cuma masuk akal
+              kalau tidak ada kolom Editor di sebelahnya. */}
 
           {/* Section B — isi undangan, lebar diatur di style maxWidth (bukan
               class Tailwind arbitrary value, yang terbukti tidak ter-compile
@@ -612,6 +657,16 @@ export default function EditorPage() {
                       data={data.weddingGift}
                       waNumber={data.general.waNumber}
                     />
+                  )}
+                </AnimatePresence>
+                <AnimatePresence>
+                  {data.rsvp.rsvpEnabled && (
+                    <RsvpSection key="rsvp" data={data.rsvp} invitationId={invitationId} />
+                  )}
+                </AnimatePresence>
+                <AnimatePresence>
+                  {data.wish.wishEnabled && (
+                    <WishSection key="wish" data={data.wish} invitationId={invitationId} />
                   )}
                 </AnimatePresence>
                 <BottomNav />

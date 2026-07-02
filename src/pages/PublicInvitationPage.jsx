@@ -14,6 +14,8 @@ import PraySection from "../components/sections/template-1/PraySection";
 import InviteSection from "../components/sections/template-1/InviteSection";
 import FooterSection from "../components/sections/template-1/FooterSection";
 import WeddingGiftSection from "../components/sections/template-1/WeddingGiftSection";
+import RsvpSection from "../components/sections/template-1/RsvpSection";
+import WishSection from "../components/sections/template-1/WishSection";
 import StickyMusic from "../components/StickyMusic";
 import BottomNav from "../components/BottomNav";
 import { templateConfig } from "../data/templateConfig";
@@ -33,6 +35,8 @@ import {
   footerDefaultData,
   wgDefaultData,
   generalDefaultData,
+  rsvpDefaultData,
+  wishDefaultData,
 } from "../data/schemas";
 
 export default function PublicInvitationPage() {
@@ -53,10 +57,13 @@ export default function PublicInvitationPage() {
     footer: footerDefaultData,
     general: generalDefaultData,
     weddingGift: wgDefaultData,
+    rsvp: rsvpDefaultData,
+    wish: wishDefaultData,
   });
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [templateId, setTemplateId] = useState(DEFAULT_TEMPLATE_ID);
+  const [invitationId, setInvitationId] = useState(null);
 
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -96,7 +103,7 @@ export default function PublicInvitationPage() {
       // jadi query ini otomatis gagal/kosong untuk invitation draft.
       const { data: result, error } = await supabase
         .from("invitations")
-        .select("data, template_id, status")
+        .select("id, data, template_id, status")
         .eq("slug", slug)
         .eq("status", "published")
         .maybeSingle();
@@ -107,6 +114,7 @@ export default function PublicInvitationPage() {
         return;
       }
 
+      setInvitationId(result.id);
       setTemplateId(result.template_id || DEFAULT_TEMPLATE_ID);
 
       setData((prev) => ({
@@ -123,6 +131,8 @@ export default function PublicInvitationPage() {
         footer: { ...prev.footer, ...result.data.footer },
         general: { ...prev.general, ...result.data.general },
         weddingGift: { ...prev.weddingGift, ...result.data.weddingGift },
+        rsvp: { ...prev.rsvp, ...result.data.rsvp },
+        wish: { ...prev.wish, ...result.data.wish },
       }));
 
       setLoading(false);
@@ -222,6 +232,16 @@ export default function PublicInvitationPage() {
                   data={data.weddingGift}
                   waNumber={data.general.waNumber}
                 />
+              )}
+            </AnimatePresence>
+            <AnimatePresence>
+              {data.rsvp.rsvpEnabled && (
+                <RsvpSection key="rsvp" data={data.rsvp} invitationId={invitationId} />
+              )}
+            </AnimatePresence>
+            <AnimatePresence>
+              {data.wish.wishEnabled && (
+                <WishSection key="wish" data={data.wish} invitationId={invitationId} />
               )}
             </AnimatePresence>
             <BottomNav />

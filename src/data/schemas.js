@@ -237,3 +237,29 @@ export const wgDefaultData = {
     { bankName: "Mandiri", bankAccount: "Yunita Safitri", bankNumber: "0987654321" },
   ],
 };
+
+export const rsvpFields = [
+  { key: "rsvpEnabled", type: "toggle", label: "Aktifkan RSVP" },
+  { key: "rsvpHeading", type: "text", label: "Judul" },
+  { key: "rsvpContent", type: "textarea", label: "Deskripsi", maxLength: 256 },
+];
+
+export const rsvpDefaultData = {
+  rsvpEnabled: true,
+  rsvpHeading: "RSVP",
+  rsvpContent: "Konfirmasi kehadiran Bapak/Ibu/Saudara/i sangat berarti bagi kami.",
+};
+
+export const wishFields = [
+  { key: "wishEnabled", type: "toggle", label: "Aktifkan Wedding Wishes" },
+  { key: "wishFormEnabled", type: "toggle", label: "Terima ucapan baru (kalau off, form disembunyikan tapi ucapan lama tetap tampil)" },
+  { key: "wishHeading", type: "text", label: "Judul" },
+  { key: "wishContent", type: "textarea", label: "Deskripsi", maxLength: 256 },
+];
+
+export const wishDefaultData = {
+  wishEnabled: true,
+  wishFormEnabled: true,
+  wishHeading: "Wedding Wishes",
+  wishContent: "Sampaikan ucapan selamat, doa, dan lain-lain.",
+};
