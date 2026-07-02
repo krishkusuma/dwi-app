@@ -546,9 +546,9 @@ export default function EditorPage() {
 
         <div className="relative flex justify-center bg-gray-100 min-h-screen">
           {/* Catatan: Section A (background desktopImage, hidden di mobile) SENGAJA
-              tidak dirender di EditorPage sama sekali — ini eksklusif untuk halaman
-              publik nanti (lihat tahap Publishing), karena posisinya cuma masuk akal
-              kalau tidak ada kolom Editor di sebelahnya. */}
+              tidak dirender di EditorPage sama sekali — ini eksklusif hanya untuk halaman
+              publik saja nanti (lihat tahap Publishing), karena posisinya cuma masuk akal
+              kalau tidak ada kolom Editor di sebelahnya.*/}
 
           {/* Section B — isi undangan, lebar diatur di style maxWidth (bukan
               class Tailwind arbitrary value, yang terbukti tidak ter-compile
