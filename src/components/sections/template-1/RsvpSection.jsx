@@ -6,7 +6,7 @@ const ATTENDANCE_OPTIONS = [
   { value: "tidak_hadir", label: "Tidak Hadir" },
 ];
 
-export default function RsvpSection({ data, invitationId }) {
+export default function RsvpSection({ data, invitationId, guestToken }) {
   const {
     guestName,
     setGuestName,
@@ -16,9 +16,12 @@ export default function RsvpSection({ data, invitationId }) {
     setGuestCount,
     submitting,
     submitted,
+    alreadyResponded,
     error,
+    isGuestMode,
+    checkingGuest,
     submitRsvp,
-  } = useRsvpSection(invitationId);
+  } = useRsvpSection(invitationId, guestToken);
 
   return (
     <div
@@ -28,7 +31,9 @@ export default function RsvpSection({ data, invitationId }) {
       <h3 className="invitation-rsvp-heading font-serif text-2xl mb-3">{data.rsvpHeading}</h3>
       <p className="invitation-rsvp-content text-sm mb-6 max-w-md">{data.rsvpContent}</p>
 
-      {submitted ? (
+      {checkingGuest ? (
+        <p className="text-sm text-gray-400">Memuat...</p>
+      ) : submitted || alreadyResponded ? (
         <p className="invitation-rsvp-thanks text-sm font-medium">
           Terima kasih, konfirmasi kehadiran Anda sudah kami terima.
         </p>
@@ -39,7 +44,8 @@ export default function RsvpSection({ data, invitationId }) {
             value={guestName}
             onChange={(e) => setGuestName(e.target.value)}
             placeholder="Nama Anda"
-            className="invitation-rsvp-input w-full px-4 py-2 text-sm rounded-full"
+            disabled={isGuestMode}
+            className="invitation-rsvp-input w-full px-4 py-2 text-sm rounded-full disabled:opacity-70"
           />
 
           <div className="invitation-rsvp-attendance flex gap-2 justify-center flex-wrap">
