@@ -133,8 +133,8 @@ export default function GuestManagementPage() {
       complete: async (results) => {
         const rows = results.data
           .map((row) => {
-            // Terima beberapa variasi nama kolom umum, biar nggak strict soal
-            // header CSV harus persis "Nama"/"No HP".
+            // Terima beberapa variasi nama kolom umum, tapi biar nggak strict soal
+            // header CSV harus persis "Nama"/"Nomor HP".
             const name = row.Nama || row.nama || row.name || row.Name || "";
             const phone =
               row["No HP"] || row.no_hp || row.phone || row.Phone || row.telepon || "";
