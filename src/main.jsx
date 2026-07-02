@@ -9,8 +9,7 @@ import EditorPage from "./pages/EditorPage";
 import PublicInvitationPage from "./pages/PublicInvitationPage";
 import RegisterPage from "./pages/RegisterPage";
 import PaymentResultPage from "./pages/PaymentResultPage";
-import ForgotPasswordPage from "./pages/ForgotPasswordPage";
-import ResetPasswordPage from "./pages/ResetPasswordPage";
+import GuestManagementPage from "./pages/GuestManagementPage";
 import "./index.css";
 import "./styles/templates/template-1.css";
 import "./styles/templates/template-2.css";
@@ -23,8 +22,6 @@ createRoot(document.getElementById("root")).render(
         <Routes>
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
-          <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-          <Route path="/reset-password" element={<ResetPasswordPage />} />
           <Route path="/payment/success" element={<PaymentResultPage status="success" />} />
           <Route path="/payment/pending" element={<PaymentResultPage status="pending" />} />
           <Route path="/payment/failed" element={<PaymentResultPage status="failed" />} />
@@ -46,6 +43,15 @@ createRoot(document.getElementById("root")).render(
               </ProtectedRoute>
             }
           />
+
+          <Route
+            path="/dashboard/:invitationId/guests"
+            element={
+              <ProtectedRoute>
+                <GuestManagementPage />
+              </ProtectedRoute>
+            }
+          />          
 
           <Route path="/u/:slug" element={<PublicInvitationPage />} />
           <Route path="/" element={<Navigate to="/dashboard" replace />} />

@@ -78,16 +78,27 @@ export default function DashboardPage() {
       ) : (
         <div className="flex flex-col gap-3">
           {invitations.map((inv) => (
-            <button
+            <div
               key={inv.id}
-              onClick={() => navigate(`/editor/${inv.id}`)}
-              className="text-left p-4 border rounded-lg hover:bg-gray-50"
+              className="p-4 border rounded-lg hover:bg-gray-50 flex items-center justify-between gap-3"
             >
-              <p className="font-medium">{inv.title || "Undangan Tanpa Judul"}</p>
-              <p className="text-xs text-gray-400 mt-1">
-                Diubah: {new Date(inv.updated_at).toLocaleString("id-ID")}
-              </p>
-            </button>
+              <button
+                onClick={() => navigate(`/editor/${inv.id}`)}
+                className="text-left flex-1 min-w-0"
+              >
+                <p className="font-medium truncate">{inv.title || "Undangan Tanpa Judul"}</p>
+                <p className="text-xs text-gray-400 mt-1">
+                  Diubah: {new Date(inv.updated_at).toLocaleString("id-ID")}
+                </p>
+              </button>
+
+              <button
+                onClick={() => navigate(`/dashboard/${inv.id}/guests`)}
+                className="text-xs px-3 py-1.5 border rounded-lg text-gray-600 shrink-0"
+              >
+                Tamu &amp; Ucapan
+              </button>
+            </div>
           ))}
         </div>
       )}
