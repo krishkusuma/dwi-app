@@ -78,11 +78,12 @@ export default function GuestManagementPage() {
     }
   };
 
-  const getGuestLink = (token) => `${window.location.origin}/u/${slug}?g=${token}`;
+  const getGuestLink = (guest) =>
+    `${window.location.origin}/u/${slug}?to=${encodeURIComponent(guest.guest_name)}&g=${guest.guest_token}`;
 
   const copyGuestLink = async (guest) => {
     try {
-      await navigator.clipboard.writeText(getGuestLink(guest.guest_token));
+      await navigator.clipboard.writeText(getGuestLink(guest));
       setCopiedGuestId(guest.id);
       setTimeout(() => setCopiedGuestId(null), 2000);
     } catch (err) {
