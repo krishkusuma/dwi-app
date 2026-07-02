@@ -193,18 +193,6 @@ export const footerDefaultData = {
     "Suatu kebahagiaan dan kehormatan bagi kami apabila Bapak/Ibu/Saudara/i berkenan hadir dan memberikan doa restu.",
 };
 
-export const rsvpFields = [
-  { key: "rsvpEnabled", type: "toggle", label: "Aktifkan RSVP" },
-  { key: "rsvpDeadline", type: "date", label: "Batas Konfirmasi" },
-  { key: "maxGuestPerInvite", type: "text", label: "Maks. Tamu per Konfirmasi" },
-];
-
-export const rsvpDefaultData = {
-  rsvpEnabled: true,
-  rsvpDeadline: "2026-12-20",
-  maxGuestPerInvite: "2",
-};
-
 // General / Global settings — bukan section visual, dipakai lintas fitur
 export const generalFields = [
   { key: "waNumber", type: "text", label: "Nomor WhatsApp Utama (format 62xxxxxxxxxx)" },
