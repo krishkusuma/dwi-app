@@ -1,4 +1,4 @@
-import { Home, Heart, Calendar, BookOpen, Image } from "lucide-react";
+import { Home, Heart, Calendar, BookOpen, Image, Gift, Radio } from "lucide-react";
 
 // Konfigurasi terpusat untuk BottomNav (sticky footer, icon-only).
 // Sama pola dengan menuConfig.js — menambah section Premium nanti
@@ -12,8 +12,9 @@ export const standardBottomNav = [
   { value: "galeri", label: "Galeri", icon: Image },
 ];
 
-// Diisi nanti saat scoping Premium dimulai, contoh:
-// export const premiumBottomNav = [
-//   { value: "rsvp", label: "RSVP", icon: CheckCircle },
-// ];
-export const premiumBottomNav = [];
+// Item di sini HANYA muncul kalau isPremiumUser true DAN section terkait
+// enabled (dicek di komponen BottomNav lewat prop enabledSections).
+export const premiumBottomNav = [
+  { value: "gift", label: "Gift", icon: Gift },
+  { value: "livestream", label: "Live", icon: Radio },
+];

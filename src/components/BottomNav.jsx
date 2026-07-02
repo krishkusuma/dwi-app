@@ -1,19 +1,24 @@
 import { standardBottomNav, premiumBottomNav } from "../data/bottomNavConfig";
 
 // Pemetaan value section ke id elemen di preview untuk discroll.
-// Sama dengan SECTION_SCROLL_TARGETS di App.jsx, tapi cuma untuk 5 section
-// yang ada di bottom nav.
+// Sama dengan SECTION_SCROLL_TARGETS di EditorPage.jsx, tapi cuma untuk
+// section yang ada di bottom nav.
 const NAV_SCROLL_TARGETS = {
   cover: "hero-section",
   mempelai: "couple-section",
   acara: "event-section",
   story: "story-section",
   galeri: "gallery-section",
+  gift: "wedding-gift-section",
+  livestream: "livestreaming-section",
 };
 
-export default function BottomNav({ isPremiumUser = false }) {
+export default function BottomNav({ isPremiumUser = false, enabledSections = {} }) {
+  // Item premium cuma muncul kalau DUA syarat kepenuhi: user-nya premium,
+  // DAN section itu sendiri statusnya enabled (mis. wgEnabled/lsEnabled).
+  // enabledSections contoh: { gift: data.weddingGift.wgEnabled, livestream: data.livestream.lsEnabled }
   const navItems = isPremiumUser
-    ? [...standardBottomNav, ...premiumBottomNav]
+    ? [...standardBottomNav, ...premiumBottomNav.filter((item) => enabledSections[item.value])]
     : standardBottomNav;
 
   const handleNavClick = (value) => {

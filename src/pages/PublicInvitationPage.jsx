@@ -78,6 +78,7 @@ export default function PublicInvitationPage() {
   const [notFound, setNotFound] = useState(false);
   const [templateId, setTemplateId] = useState(DEFAULT_TEMPLATE_ID);
   const [invitationId, setInvitationId] = useState(null);
+  const [isPremiumUser, setIsPremiumUser] = useState(false);
 
   const audioRef = useRef(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -117,7 +118,7 @@ export default function PublicInvitationPage() {
       // jadi query ini otomatis gagal/kosong untuk invitation draft.
       const { data: result, error } = await supabase
         .from("invitations")
-        .select("id, data, template_id, status")
+        .select("id, data, template_id, status, plan")
         .eq("slug", slug)
         .eq("status", "published")
         .maybeSingle();
@@ -130,6 +131,7 @@ export default function PublicInvitationPage() {
 
       setInvitationId(result.id);
       setTemplateId(result.template_id || DEFAULT_TEMPLATE_ID);
+      setIsPremiumUser(result.plan !== "starter");
 
       setData((prev) => ({
         hero: { ...prev.hero, ...result.data.hero },
@@ -244,7 +246,7 @@ export default function PublicInvitationPage() {
               brideName={data.hero.brideName}
             />
             <AnimatePresence>
-              {data.weddingGift.wgEnabled && (
+              {isPremiumUser && data.weddingGift.wgEnabled && (
                 <WeddingGiftSection
                   key="weddingGift"
                   data={data.weddingGift}
@@ -253,7 +255,7 @@ export default function PublicInvitationPage() {
               )}
             </AnimatePresence>
             <AnimatePresence>
-              {data.rsvp.rsvpEnabled && (
+              {isPremiumUser && data.rsvp.rsvpEnabled && (
                 <RsvpSection
                   key="rsvp"
                   data={data.rsvp}
@@ -263,24 +265,32 @@ export default function PublicInvitationPage() {
               )}
             </AnimatePresence>
             <AnimatePresence>
-              {data.wish.wishEnabled && (
+              {isPremiumUser && data.wish.wishEnabled && (
                 <WishSection key="wish" data={data.wish} invitationId={invitationId} />
               )}
             </AnimatePresence>
-            {data.livestream.lsEnabled && (
+            {isPremiumUser && data.livestream.lsEnabled && (
               <LiveStreamingSection data={data.livestream} />
             )}
-            {data.video.videoEnabled && <VideoSection data={data.video} />}
-            {data.rundown.rundownEnabled && <RundownSection data={data.rundown} />}
-            <QRCheckinModal
-              data={data.qr}
-              invitationId={invitationId}
-              guestToken={guestToken}
-              groomName={data.hero.groomName}
-              brideName={data.hero.brideName}
-              weddingDate={data.opening.weddingDate}
+            {isPremiumUser && data.video.videoEnabled && <VideoSection data={data.video} />}
+            {isPremiumUser && data.rundown.rundownEnabled && <RundownSection data={data.rundown} />}
+            {isPremiumUser && (
+              <QRCheckinModal
+                data={data.qr}
+                invitationId={invitationId}
+                guestToken={guestToken}
+                groomName={data.hero.groomName}
+                brideName={data.hero.brideName}
+                weddingDate={data.opening.weddingDate}
+              />
+            )}
+            <BottomNav
+              isPremiumUser={isPremiumUser}
+              enabledSections={{
+                gift: data.weddingGift.wgEnabled,
+                livestream: data.livestream.lsEnabled,
+              }}
             />
-            <BottomNav />
           </>
         )}
       </div>

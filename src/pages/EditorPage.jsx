@@ -803,7 +803,7 @@ export default function EditorPage() {
                   brideName={data.hero.brideName}
                 />
                 <AnimatePresence>
-                  {data.weddingGift.wgEnabled && (
+                  {isPremiumUser && data.weddingGift.wgEnabled && (
                     <WeddingGiftSection
                       key="weddingGift"
                       data={data.weddingGift}
@@ -812,21 +812,27 @@ export default function EditorPage() {
                   )}
                 </AnimatePresence>
                 <AnimatePresence>
-                  {data.rsvp.rsvpEnabled && (
+                  {isPremiumUser && data.rsvp.rsvpEnabled && (
                     <RsvpSection key="rsvp" data={data.rsvp} invitationId={invitationId} />
                   )}
                 </AnimatePresence>
                 <AnimatePresence>
-                  {data.wish.wishEnabled && (
+                  {isPremiumUser && data.wish.wishEnabled && (
                     <WishSection key="wish" data={data.wish} invitationId={invitationId} />
                   )}
                 </AnimatePresence>
-                {data.livestream.lsEnabled && (
+                {isPremiumUser && data.livestream.lsEnabled && (
                   <LiveStreamingSection data={data.livestream} />
                 )}
-                {data.video.videoEnabled && <VideoSection data={data.video} />}
-                {data.rundown.rundownEnabled && <RundownSection data={data.rundown} />}
-                <BottomNav />
+                {isPremiumUser && data.video.videoEnabled && <VideoSection data={data.video} />}
+                {isPremiumUser && data.rundown.rundownEnabled && <RundownSection data={data.rundown} />}
+                <BottomNav
+                  isPremiumUser={isPremiumUser}
+                  enabledSections={{
+                    gift: data.weddingGift.wgEnabled,
+                    livestream: data.livestream.lsEnabled,
+                  }}
+                />
               </>
             )}
           </div>
