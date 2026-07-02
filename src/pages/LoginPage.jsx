@@ -54,7 +54,7 @@ export default function LoginPage() {
               >
                 Lupa password kamu?
               </button>
-            </ iv>
+            </div>
             <input
               type="password"
               required
