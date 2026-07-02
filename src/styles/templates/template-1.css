@@ -360,3 +360,28 @@
 .template-1 .invitation-rundown-item {
   border-bottom: 1px solid #e5e7eb;
 }
+
+.template-1 .invitation-qr-trigger {
+  background-color: var(--inv-accent);
+  color: var(--inv-accent-text);
+}
+.template-1 .invitation-qr-heading {
+  color: var(--inv-text-heading);
+}
+.template-1 .invitation-qr-image-overlay {
+  background: linear-gradient(to top, rgba(0,0,0,0.6), transparent);
+  color: #ffffff;
+}
+.template-1 .invitation-qr-recipient {
+  color: var(--inv-text-primary);
+}
+.template-1 .invitation-qr-guest-name {
+  color: var(--inv-text-heading);
+}
+.template-1 .invitation-qr-note {
+  color: var(--inv-text-primary);
+}
+.template-1 .invitation-qr-download {
+  background-color: var(--inv-accent);
+  color: var(--inv-accent-text);
+}

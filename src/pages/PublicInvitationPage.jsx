@@ -19,6 +19,7 @@ import WishSection from "../components/sections/template-1/WishSection";
 import LiveStreamingSection from "../components/sections/template-1/LiveStreamingSection";
 import VideoSection from "../components/sections/template-1/VideoSection";
 import RundownSection from "../components/sections/template-1/RundownSection";
+import QRCheckinModal from "../components/sections/template-1/QRCheckinModal";
 import StickyMusic from "../components/StickyMusic";
 import BottomNav from "../components/BottomNav";
 import { templateConfig } from "../data/templateConfig";
@@ -43,6 +44,7 @@ import {
   lsDefaultData,
   videoDefaultData,
   rundownDefaultData,
+  qrDefaultData,
 } from "../data/schemas";
 
 export default function PublicInvitationPage() {
@@ -70,6 +72,7 @@ export default function PublicInvitationPage() {
     livestream: lsDefaultData,
     video: videoDefaultData,
     rundown: rundownDefaultData,
+    qr: qrDefaultData,
   });
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -147,6 +150,7 @@ export default function PublicInvitationPage() {
         livestream: { ...prev.livestream, ...result.data.livestream },
         video: { ...prev.video, ...result.data.video },
         rundown: { ...prev.rundown, ...result.data.rundown },
+        qr: { ...prev.qr, ...result.data.qr },
       }));
 
       setLoading(false);
@@ -268,6 +272,14 @@ export default function PublicInvitationPage() {
             )}
             {data.video.videoEnabled && <VideoSection data={data.video} />}
             {data.rundown.rundownEnabled && <RundownSection data={data.rundown} />}
+            <QRCheckinModal
+              data={data.qr}
+              invitationId={invitationId}
+              guestToken={guestToken}
+              groomName={data.hero.groomName}
+              brideName={data.hero.brideName}
+              weddingDate={data.opening.weddingDate}
+            />
             <BottomNav />
           </>
         )}

@@ -20,4 +20,5 @@ export const premiumMenuSections = [
   { value: "livestream", label: "Live Streaming" },
   { value: "video", label: "Video" },
   { value: "rundown", label: "Rundown" },
+  { value: "qr", label: "QR Check-in" },
 ];

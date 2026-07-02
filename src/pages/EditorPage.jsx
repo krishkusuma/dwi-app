@@ -48,6 +48,7 @@ import {
   lsSettingsFields, lsDefaultData,
   videoFields, videoDefaultData,
   rundownFields, rundownItemFields, rundownDefaultData,
+  qrFields, qrDefaultData,
 } from "../data/schemas";
 
 // Pemetaan dari "value" dropdown ke id elemen section di preview,
@@ -92,6 +93,7 @@ export default function EditorPage() {
     livestream: lsDefaultData,
     video: videoDefaultData,
     rundown: rundownDefaultData,
+    qr: qrDefaultData,
   });
   const [loading, setLoading] = useState(true);
   const [templateId, setTemplateId] = useState(DEFAULT_TEMPLATE_ID);
@@ -219,6 +221,7 @@ export default function EditorPage() {
           livestream: { ...prev.livestream, ...result.data.livestream },
           video: { ...prev.video, ...result.data.video },
           rundown: { ...prev.rundown, ...result.data.rundown },
+          qr: { ...prev.qr, ...result.data.qr },
         }));
       }
       setLoading(false);
@@ -646,6 +649,24 @@ export default function EditorPage() {
                   setData({ ...data, rundown: { ...data.rundown, rundownItems: newItems } })
                 }
               />
+            </>
+          )}
+
+          {activeSection === "qr" && (
+            <>
+              <h4 className="mb-4 font-medium">QR Check-in</h4>
+              {qrFields.map((field) => (
+                <FieldRenderer
+                  key={field.key}
+                  field={field}
+                  value={data.qr[field.key]}
+                  onChange={(key, value) => handleChange("qr", key, value)}
+                />
+              ))}
+              <p className="text-xs text-gray-500 mt-2">
+                Tombol QR cuma muncul kalau undangan dibuka lewat link personal tamu
+                (dari Dashboard → Daftar Tamu), tidak akan tampil di preview editor ini.
+              </p>
             </>
           )}
         </div>

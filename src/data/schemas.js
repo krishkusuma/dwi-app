@@ -297,3 +297,15 @@ export const rundownDefaultData = {
     { rundownTime: "12:00 PM", rundownInfo: "Ceremony Begins" },
   ],
 };
+
+export const qrFields = [
+  { key: "qrEnabled", type: "toggle", label: "Aktifkan QR Check-in" },
+  { key: "qrHeading", type: "text", label: "Judul" },
+  { key: "qrImage", type: "image", size: "large", label: "Foto" },
+];
+
+export const qrDefaultData = {
+  qrEnabled: true,
+  qrHeading: "QR Check-in",
+  qrImage: templateConfig.dummyQrImage,
+};

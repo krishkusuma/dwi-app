@@ -43,4 +43,7 @@ export const templateConfig = {
   // PREMIUM — video YouTube. Klien akan paste link YouTube biasa nanti,
   // dummy ini hanya placeholder contoh untuk preview sebelum diisi klien.
   dummyVideoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+
+  dummyQrImage: "https://remonial.com/images/qr-cover.webp",
+  
 };
