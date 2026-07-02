@@ -13,6 +13,10 @@ export const standardMenuSections = [
   { value: "penutup", label: "Penutup" },
 ];
 
+export const premiumMenuSections = [
+  { value: "gift", label: "Wedding Gift" },
+];
+
 // Diisi nanti saat scoping Premium dimulai, contoh:
 // export const premiumMenuSections = [
 //   { value: "rsvp", label: "RSVP" },

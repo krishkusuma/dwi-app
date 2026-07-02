@@ -13,6 +13,7 @@ import GallerySection from "../components/sections/template-1/GallerySection";
 import PraySection from "../components/sections/template-1/PraySection";
 import InviteSection from "../components/sections/template-1/InviteSection";
 import FooterSection from "../components/sections/template-1/FooterSection";
+import WeddingGiftSection from "../components/sections/template-1/WeddingGiftSection";
 import StickyMusic from "../components/StickyMusic";
 import BottomNav from "../components/BottomNav";
 import { templateConfig } from "../data/templateConfig";
@@ -30,6 +31,8 @@ import {
   prayDefaultData,
   inviteDefaultData,
   footerDefaultData,
+  wgDefaultData,
+  generalDefaultData,
 } from "../data/schemas";
 
 export default function PublicInvitationPage() {
@@ -48,6 +51,8 @@ export default function PublicInvitationPage() {
     pray: prayDefaultData,
     invite: inviteDefaultData,
     footer: footerDefaultData,
+    general: generalDefaultData,
+    weddingGift: wgDefaultData,
   });
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -116,6 +121,8 @@ export default function PublicInvitationPage() {
         pray: { ...prev.pray, ...result.data.pray },
         invite: { ...prev.invite, ...result.data.invite },
         footer: { ...prev.footer, ...result.data.footer },
+        general: { ...prev.general, ...result.data.general },
+        weddingGift: { ...prev.weddingGift, ...result.data.weddingGift },
       }));
 
       setLoading(false);
@@ -208,6 +215,15 @@ export default function PublicInvitationPage() {
               groomName={data.hero.groomName}
               brideName={data.hero.brideName}
             />
+            <AnimatePresence>
+              {data.weddingGift.wgEnabled && (
+                <WeddingGiftSection
+                  key="weddingGift"
+                  data={data.weddingGift}
+                  waNumber={data.general.waNumber}
+                />
+              )}
+            </AnimatePresence>
             <BottomNav />
           </>
         )}

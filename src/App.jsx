@@ -15,14 +15,15 @@ import GallerySection from "./components/sections/GallerySection";
 import PraySection from "./components/sections/PraySection";
 import InviteSection from "./components/sections/InviteSection";
 import FooterSection from "./components/sections/FooterSection";
+import WeddingGiftSection from "./components/sections/template-1/WeddingGiftSection";
 import StickyMusic from "./components/StickyMusic";
 import BottomNav from "./components/BottomNav";
 import { templateConfig } from "./data/templateConfig";
 
 const INVITATION_ID = "demo-andi-sinta";
 
-import { 
-  heroFields, heroDefaultData, 
+import {
+  heroFields, heroDefaultData,
   openingFields, openingDefaultData,
   quoteFields, quoteDefaultData,
   coupleFields, coupleDefaultData,
@@ -33,6 +34,8 @@ import {
   prayFields, prayDefaultData,
   inviteFields, inviteDefaultData,
   footerFields, footerDefaultData,
+  wgSettingsFields, wgAccountItemFields, wgDefaultData,
+  generalFields, generalDefaultData,
 } from "./data/schemas";
 
 // Pemetaan dari "value" dropdown ke id elemen section di preview,
@@ -46,6 +49,7 @@ const SECTION_SCROLL_TARGETS = {
   story: "story-section",
   galeri: "gallery-section",
   penutup: "pray-section",
+  gift: "wedding-gift-section",
 };
 
 export default function App() {
@@ -61,8 +65,14 @@ export default function App() {
     pray: prayDefaultData,
     invite: inviteDefaultData,
     footer: footerDefaultData,
+    general: generalDefaultData,
+    weddingGift: wgDefaultData,
   });
   const [loading, setLoading] = useState(true);
+
+  // Status plan invitation ini ("starter" / "premium"), dipakai buat nentuin
+  // section Premium mana yang muncul di dropdown SectionSelector.
+  const [isPremiumUser, setIsPremiumUser] = useState(false);
 
   // Section mana yang sedang dipilih di dropdown editor.
   const [activeSection, setActiveSection] = useState("cover");
@@ -141,11 +151,13 @@ export default function App() {
     async function loadData() {
       const { data: result, error } = await supabase
         .from("invitations")
-        .select("data")
+        .select("data, plan")
         .eq("id", INVITATION_ID)
         .maybeSingle();
 
       if (result) {
+        setIsPremiumUser(result.plan !== "starter");
+
         // Merge supaya field baru di schema (mis. errGuestName) tetap punya
         // nilai default walau data lama di Supabase belum punya key tersebut.
         setData((prev) => ({
@@ -160,6 +172,8 @@ export default function App() {
           pray: { ...prev.pray, ...result.data.pray },
           invite: { ...prev.invite, ...result.data.invite },
           footer: { ...prev.footer, ...result.data.footer },
+          general: { ...prev.general, ...result.data.general },
+          weddingGift: { ...prev.weddingGift, ...result.data.weddingGift },
         }));
       }
       setLoading(false);
@@ -169,13 +183,13 @@ export default function App() {
 
   useEffect(() => {
     if (loading) return; // jangan save selagi masih loading data awal
-  
+
     async function saveData() {
       await supabase
         .from("invitations")
         .upsert({ id: INVITATION_ID, data: data, updated_at: new Date() });
     }
-  
+
     const timer = setTimeout(saveData, 1000); // debounce 1 detik
     return () => clearTimeout(timer);
   }, [data]);
@@ -189,7 +203,7 @@ export default function App() {
       },
     });
   };
-  
+
   if (loading) {
     return <div className="p-6 text-center text-gray-400">Memuat data...</div>;
   }
@@ -207,7 +221,11 @@ export default function App() {
             overflowY: "auto",
           }}
         >
-          <SectionSelector value={activeSection} onChange={handleSectionChange} />
+          <SectionSelector
+            value={activeSection}
+            onChange={handleSectionChange}
+            isPremiumUser={isPremiumUser}
+          />
 
           {activeSection === "cover" && (
             <>
@@ -353,6 +371,38 @@ export default function App() {
               ))}
             </>
           )}
+
+          {activeSection === "gift" && (
+            <>
+              <h4 className="mb-4 font-medium">Wedding Gift</h4>
+              {wgSettingsFields.map((field) => (
+                <FieldRenderer
+                  key={field.key}
+                  field={field}
+                  value={data.weddingGift[field.key]}
+                  onChange={(key, value) => handleChange("weddingGift", key, value)}
+                />
+              ))}
+              <RepeaterEditor
+                items={data.weddingGift.wgAccounts}
+                itemFields={wgAccountItemFields}
+                itemLabel="Rekening"
+                onChange={(newItems) =>
+                  setData({ ...data, weddingGift: { ...data.weddingGift, wgAccounts: newItems } })
+                }
+              />
+
+              <h4 className="mb-4 mt-8 font-medium">Pengaturan Umum</h4>
+              {generalFields.map((field) => (
+                <FieldRenderer
+                  key={field.key}
+                  field={field}
+                  value={data.general[field.key]}
+                  onChange={(key, value) => handleChange("general", key, value)}
+                />
+              ))}
+            </>
+          )}
         </div>
       )}
 
@@ -429,6 +479,7 @@ export default function App() {
                   groomName={data.hero.groomName}
                   brideName={data.hero.brideName}
                 />
+                <WeddingGiftSection data={data.weddingGift} waNumber={data.general.waNumber} />
                 <BottomNav />
               </>
             )}

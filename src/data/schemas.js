@@ -204,3 +204,36 @@ export const rsvpDefaultData = {
   rsvpDeadline: "2026-12-20",
   maxGuestPerInvite: "2",
 };
+
+// General / Global settings — bukan section visual, dipakai lintas fitur
+export const generalFields = [
+  { key: "waNumber", type: "text", label: "Nomor WhatsApp Utama (format 62xxxxxxxxxx)" },
+];
+
+export const generalDefaultData = {
+  waNumber: "",
+};
+
+// Wedding Gift
+export const wgSettingsFields = [
+  { key: "wgEnabled", type: "toggle", label: "Aktifkan Wedding Gift" },
+  { key: "wgHeading", type: "text", label: "Judul" },
+  { key: "wgContent", type: "textarea", label: "Deskripsi", maxLength: 256 },
+];
+
+export const wgAccountItemFields = [
+  { key: "bankName", type: "text", label: "Nama Bank" },
+  { key: "bankAccount", type: "text", label: "Nama Pemilik Rekening" },
+  { key: "bankNumber", type: "text", label: "Nomor Rekening" },
+];
+
+export const wgDefaultData = {
+  wgEnabled: true,
+  wgHeading: "Wedding Gift",
+  wgContent:
+    "Tanpa mengurangi rasa hormat, bagi Bapak/Ibu/Saudara/i yang ingin memberikan tanda kasih, dapat melalui:",
+  wgAccounts: [
+    { bankName: "BCA", bankAccount: "Riyan Kuswoyo", bankNumber: "1234567890" },
+    { bankName: "Mandiri", bankAccount: "Yunita Safitri", bankNumber: "0987654321" },
+  ],
+};
