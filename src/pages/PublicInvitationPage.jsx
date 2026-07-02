@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useSearchParams } from "react-router-dom";
 import { AnimatePresence } from "framer-motion";
 import { supabase } from "../lib/supabaseClient";
 import HeroSection from "../components/sections/template-1/HeroSection";
@@ -42,6 +42,8 @@ import {
 export default function PublicInvitationPage() {
   const { slug } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const guestToken = searchParams.get("g");
 
   const [data, setData] = useState({
     hero: heroDefaultData,
@@ -236,7 +238,12 @@ export default function PublicInvitationPage() {
             </AnimatePresence>
             <AnimatePresence>
               {data.rsvp.rsvpEnabled && (
-                <RsvpSection key="rsvp" data={data.rsvp} invitationId={invitationId} />
+                <RsvpSection
+                  key="rsvp"
+                  data={data.rsvp}
+                  invitationId={invitationId}
+                  guestToken={guestToken}
+                />
               )}
             </AnimatePresence>
             <AnimatePresence>

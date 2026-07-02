@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import Papa from "papaparse";
 import { supabase } from "../lib/supabaseClient";
 
 const ATTENDANCE_LABELS = {
@@ -15,27 +16,48 @@ export default function GuestManagementPage() {
   const [activeTab, setActiveTab] = useState("rsvp");
   const [loading, setLoading] = useState(true);
 
+  const [slug, setSlug] = useState("");
   const [rsvpList, setRsvpList] = useState([]);
   const [wishList, setWishList] = useState([]);
+  const [guestList, setGuestList] = useState([]);
+
+  const [newGuestName, setNewGuestName] = useState("");
+  const [newGuestPhone, setNewGuestPhone] = useState("");
+  const [addingGuest, setAddingGuest] = useState(false);
+  const [importing, setImporting] = useState(false);
+  const [importError, setImportError] = useState("");
+  const [copiedGuestId, setCopiedGuestId] = useState(null);
 
   useEffect(() => {
     async function loadData() {
-      const [{ data: rsvpData, error: rsvpError }, { data: wishData, error: wishError }] =
-        await Promise.all([
-          supabase
-            .from("rsvp_responses")
-            .select("id, guest_name, attendance, guest_count, created_at")
-            .eq("invitation_id", invitationId)
-            .order("created_at", { ascending: false }),
-          supabase
-            .from("wishes")
-            .select("id, wish_name, wish_content, wish_date, wish_status")
-            .eq("invitation_id", invitationId)
-            .order("wish_date", { ascending: false }),
-        ]);
+      const [
+        { data: invData },
+        { data: rsvpData, error: rsvpError },
+        { data: wishData, error: wishError },
+        { data: guestData, error: guestError },
+      ] = await Promise.all([
+        supabase.from("invitations").select("slug").eq("id", invitationId).maybeSingle(),
+        supabase
+          .from("rsvp_responses")
+          .select("id, guest_name, attendance, guest_count, created_at")
+          .eq("invitation_id", invitationId)
+          .order("created_at", { ascending: false }),
+        supabase
+          .from("wishes")
+          .select("id, wish_name, wish_content, wish_date, wish_status")
+          .eq("invitation_id", invitationId)
+          .order("wish_date", { ascending: false }),
+        supabase
+          .from("guests")
+          .select("id, guest_name, phone_number, guest_token, rsvp_response_id, created_at")
+          .eq("invitation_id", invitationId)
+          .order("created_at", { ascending: false }),
+      ]);
 
+      if (invData) setSlug(invData.slug || "");
       if (!rsvpError) setRsvpList(rsvpData);
       if (!wishError) setWishList(wishData);
+      if (!guestError) setGuestList(guestData);
       setLoading(false);
     }
     loadData();
@@ -54,6 +76,103 @@ export default function GuestManagementPage() {
         prev.map((w) => (w.id === wishId ? { ...w, wish_status: newStatus } : w))
       );
     }
+  };
+
+  const getGuestLink = (token) => `${window.location.origin}/u/${slug}?g=${token}`;
+
+  const copyGuestLink = async (guest) => {
+    try {
+      await navigator.clipboard.writeText(getGuestLink(guest.guest_token));
+      setCopiedGuestId(guest.id);
+      setTimeout(() => setCopiedGuestId(null), 2000);
+    } catch (err) {
+      console.error("Gagal menyalin link:", err);
+    }
+  };
+
+  const addGuest = async () => {
+    if (!newGuestName.trim()) return;
+    setAddingGuest(true);
+
+    const { data, error } = await supabase
+      .from("guests")
+      .insert({
+        invitation_id: invitationId,
+        guest_name: newGuestName.trim(),
+        phone_number: newGuestPhone.trim() || null,
+      })
+      .select()
+      .single();
+
+    setAddingGuest(false);
+
+    if (!error && data) {
+      setGuestList((prev) => [data, ...prev]);
+      setNewGuestName("");
+      setNewGuestPhone("");
+    }
+  };
+
+  const deleteGuest = async (guestId) => {
+    const { error } = await supabase.from("guests").delete().eq("id", guestId);
+    if (!error) {
+      setGuestList((prev) => prev.filter((g) => g.id !== guestId));
+    }
+  };
+
+  const handleCsvImport = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    setImportError("");
+    setImporting(true);
+
+    Papa.parse(file, {
+      header: true,
+      skipEmptyLines: true,
+      complete: async (results) => {
+        const rows = results.data
+          .map((row) => {
+            // Terima beberapa variasi nama kolom umum, biar nggak strict soal
+            // header CSV harus persis "Nama"/"No HP".
+            const name = row.Nama || row.nama || row.name || row.Name || "";
+            const phone =
+              row["No HP"] || row.no_hp || row.phone || row.Phone || row.telepon || "";
+            return {
+              invitation_id: invitationId,
+              guest_name: String(name).trim(),
+              phone_number: String(phone).trim() || null,
+            };
+          })
+          .filter((row) => row.guest_name);
+
+        if (rows.length === 0) {
+          setImportError("Tidak ada baris valid. Pastikan CSV punya kolom \"Nama\".");
+          setImporting(false);
+          e.target.value = "";
+          return;
+        }
+
+        const { data, error } = await supabase.from("guests").insert(rows).select();
+
+        setImporting(false);
+        e.target.value = "";
+
+        if (error) {
+          console.error("Gagal import CSV:", error);
+          setImportError("Gagal import, coba lagi.");
+          return;
+        }
+
+        setGuestList((prev) => [...data, ...prev]);
+      },
+      error: (err) => {
+        console.error("Gagal membaca CSV:", err);
+        setImportError("Gagal membaca file CSV.");
+        setImporting(false);
+        e.target.value = "";
+      },
+    });
   };
 
   const attendanceCounts = rsvpList.reduce(
@@ -80,10 +199,10 @@ export default function GuestManagementPage() {
 
       <h1 className="text-xl font-medium mb-6">Tamu &amp; Ucapan</h1>
 
-      <div className="flex gap-2 mb-6 border-b">
+      <div className="flex gap-2 mb-6 border-b overflow-x-auto">
         <button
           onClick={() => setActiveTab("rsvp")}
-          className={`px-4 py-2 text-sm font-medium ${
+          className={`px-4 py-2 text-sm font-medium whitespace-nowrap ${
             activeTab === "rsvp"
               ? "border-b-2 border-amber-700 text-amber-700"
               : "text-gray-500"
@@ -93,13 +212,23 @@ export default function GuestManagementPage() {
         </button>
         <button
           onClick={() => setActiveTab("wish")}
-          className={`px-4 py-2 text-sm font-medium ${
+          className={`px-4 py-2 text-sm font-medium whitespace-nowrap ${
             activeTab === "wish"
               ? "border-b-2 border-amber-700 text-amber-700"
               : "text-gray-500"
           }`}
         >
           Wedding Wishes ({wishList.length})
+        </button>
+        <button
+          onClick={() => setActiveTab("guests")}
+          className={`px-4 py-2 text-sm font-medium whitespace-nowrap ${
+            activeTab === "guests"
+              ? "border-b-2 border-amber-700 text-amber-700"
+              : "text-gray-500"
+          }`}
+        >
+          Daftar Tamu ({guestList.length})
         </button>
       </div>
 
@@ -192,6 +321,107 @@ export default function GuestManagementPage() {
                       }`}
                     >
                       {w.wish_status === "published" ? "Sembunyikan" : "Approve"}
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </>
+      )}
+
+      {activeTab === "guests" && (
+        <>
+          {!slug && (
+            <p className="text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg p-3 mb-4">
+              Undangan ini belum di-publish, jadi link personal belum bisa dibuka tamu.
+              Publish dulu lewat halaman Editor.
+            </p>
+          )}
+
+          {/* Tambah tamu manual */}
+          <div className="p-3 border rounded-lg mb-3">
+            <p className="text-sm font-medium mb-2">Tambah Tamu</p>
+            <div className="flex gap-2 mb-2">
+              <input
+                type="text"
+                value={newGuestName}
+                onChange={(e) => setNewGuestName(e.target.value)}
+                placeholder="Nama tamu"
+                className="flex-1 px-3 py-2 text-sm border rounded"
+              />
+              <input
+                type="text"
+                value={newGuestPhone}
+                onChange={(e) => setNewGuestPhone(e.target.value)}
+                placeholder="No. HP (opsional)"
+                className="flex-1 px-3 py-2 text-sm border rounded"
+              />
+            </div>
+            <button
+              onClick={addGuest}
+              disabled={!newGuestName.trim() || addingGuest}
+              className="text-xs px-3 py-1.5 bg-amber-700 text-white rounded disabled:opacity-50"
+            >
+              {addingGuest ? "Menambah..." : "+ Tambah Tamu"}
+            </button>
+          </div>
+
+          {/* Import CSV */}
+          <div className="p-3 border rounded-lg mb-4">
+            <p className="text-sm font-medium mb-1">Import dari CSV</p>
+            <p className="text-xs text-gray-500 mb-2">
+              File CSV dengan kolom <code>Nama</code> dan <code>No HP</code> (opsional).
+            </p>
+            <input
+              type="file"
+              accept=".csv"
+              onChange={handleCsvImport}
+              disabled={importing}
+              className="text-xs"
+            />
+            {importing && <p className="text-xs text-gray-400 mt-1">Mengimpor...</p>}
+            {importError && <p className="text-xs text-red-500 mt-1">{importError}</p>}
+          </div>
+
+          {/* Daftar tamu */}
+          {guestList.length === 0 ? (
+            <p className="text-gray-400 text-center">Belum ada tamu ditambahkan.</p>
+          ) : (
+            <div className="flex flex-col gap-2">
+              {guestList.map((g) => (
+                <div
+                  key={g.id}
+                  className="p-3 border rounded-lg flex items-center justify-between gap-2"
+                >
+                  <div className="min-w-0">
+                    <p className="text-sm font-medium truncate">{g.guest_name}</p>
+                    {g.phone_number && (
+                      <p className="text-xs text-gray-400">{g.phone_number}</p>
+                    )}
+                    <span
+                      className={`text-xs px-2 py-0.5 rounded-full font-medium inline-block mt-1 ${
+                        g.rsvp_response_id
+                          ? "bg-green-100 text-green-700"
+                          : "bg-gray-200 text-gray-600"
+                      }`}
+                    >
+                      {g.rsvp_response_id ? "Sudah RSVP" : "Belum RSVP"}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2 shrink-0">
+                    <button
+                      onClick={() => copyGuestLink(g)}
+                      disabled={!slug}
+                      className="text-xs px-3 py-1.5 border rounded disabled:opacity-50"
+                    >
+                      {copiedGuestId === g.id ? "Copied" : "Copy Link"}
+                    </button>
+                    <button
+                      onClick={() => deleteGuest(g.id)}
+                      className="text-xs text-red-500"
+                    >
+                      Hapus
                     </button>
                   </div>
                 </div>
