@@ -18,4 +18,6 @@ export const premiumMenuSections = [
   { value: "rsvp", label: "RSVP" },
   { value: "wish", label: "Wedding Wishes" },
   { value: "livestream", label: "Live Streaming" }
+  { value: "video", label: "Video" },
+  { value: "rundown", label: "Rundown" },
 ];

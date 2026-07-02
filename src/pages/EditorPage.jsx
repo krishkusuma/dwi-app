@@ -21,6 +21,8 @@ import WeddingGiftSection from "../components/sections/template-1/WeddingGiftSec
 import RsvpSection from "../components/sections/template-1/RsvpSection";
 import WishSection from "../components/sections/template-1/WishSection";
 import LiveStreamingSection from "../components/sections/template-1/LiveStreamingSection";
+import VideoSection from "../components/sections/template-1/VideoSection";
+import RundownSection from "../components/sections/template-1/RundownSection";
 import StickyMusic from "../components/StickyMusic";
 import BottomNav from "../components/BottomNav";
 import { templateConfig } from "../data/templateConfig";
@@ -44,6 +46,8 @@ import {
   rsvpFields, rsvpDefaultData,
   wishFields, wishDefaultData,
   lsSettingsFields, lsDefaultData,
+  videoFields, videoDefaultData,
+  rundownFields, rundownItemFields, rundownDefaultData,
 } from "../data/schemas";
 
 // Pemetaan dari "value" dropdown ke id elemen section di preview,
@@ -61,6 +65,8 @@ const SECTION_SCROLL_TARGETS = {
   rsvp: "rsvp-section",
   wish: "wish-section",
   livestream: "livestreaming-section",
+  video: "video-section",
+  rundown: "rundown-section",
 };
 
 export default function EditorPage() {
@@ -84,6 +90,8 @@ export default function EditorPage() {
     rsvp: rsvpDefaultData,
     wish: wishDefaultData,
     livestream: lsDefaultData,
+    video: videoDefaultData,
+    rundown: rundownDefaultData,
   });
   const [loading, setLoading] = useState(true);
   const [templateId, setTemplateId] = useState(DEFAULT_TEMPLATE_ID);
@@ -209,6 +217,8 @@ export default function EditorPage() {
           rsvp: { ...prev.rsvp, ...result.data.rsvp },
           wish: { ...prev.wish, ...result.data.wish },
           livestream: { ...prev.livestream, ...result.data.livestream },
+          video: { ...prev.video, ...result.data.video },
+          rundown: { ...prev.rundown, ...result.data.rundown },
         }));
       }
       setLoading(false);
@@ -602,6 +612,42 @@ export default function EditorPage() {
               </div>
             </>
           )}
+
+          {activeSection === "video" && (
+            <>
+              <h4 className="mb-4 font-medium">Video</h4>
+              {videoFields.map((field) => (
+                <FieldRenderer
+                  key={field.key}
+                  field={field}
+                  value={data.video[field.key]}
+                  onChange={(key, value) => handleChange("video", key, value)}
+                />
+              ))}
+            </>
+          )}
+
+          {activeSection === "rundown" && (
+            <>
+              <h4 className="mb-4 font-medium">Rundown</h4>
+              {rundownFields.map((field) => (
+                <FieldRenderer
+                  key={field.key}
+                  field={field}
+                  value={data.rundown[field.key]}
+                  onChange={(key, value) => handleChange("rundown", key, value)}
+                />
+              ))}
+              <RepeaterEditor
+                items={data.rundown.rundownItems}
+                itemFields={rundownItemFields}
+                itemLabel="Acara"
+                onChange={(newItems) =>
+                  setData({ ...data, rundown: { ...data.rundown, rundownItems: newItems } })
+                }
+              />
+            </>
+          )}
         </div>
       )}
 
@@ -757,6 +803,8 @@ export default function EditorPage() {
                 {data.livestream.lsEnabled && (
                   <LiveStreamingSection data={data.livestream} />
                 )}
+                {data.video.videoEnabled && <VideoSection data={data.video} />}
+                {data.rundown.rundownEnabled && <RundownSection data={data.rundown} />}
                 <BottomNav />
               </>
             )}

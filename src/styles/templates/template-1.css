@@ -340,3 +340,23 @@
   background-color: var(--inv-accent);
   color: var(--inv-accent-text);
 }
+
+.template-1 .invitation-video-heading {
+  color: var(--inv-text-heading);
+}
+.template-1 .invitation-video-empty {
+  color: var(--inv-text-primary);
+}
+
+.template-1 .invitation-rundown-heading {
+  color: var(--inv-text-heading);
+}
+.template-1 .invitation-rundown-time {
+  color: var(--inv-accent);
+}
+.template-1 .invitation-rundown-info {
+  color: var(--inv-text-primary);
+}
+.template-1 .invitation-rundown-item {
+  border-bottom: 1px solid #e5e7eb;
+}

@@ -17,6 +17,8 @@ import WeddingGiftSection from "../components/sections/template-1/WeddingGiftSec
 import RsvpSection from "../components/sections/template-1/RsvpSection";
 import WishSection from "../components/sections/template-1/WishSection";
 import LiveStreamingSection from "../components/sections/template-1/LiveStreamingSection";
+import VideoSection from "../components/sections/template-1/VideoSection";
+import RundownSection from "../components/sections/template-1/RundownSection";
 import StickyMusic from "../components/StickyMusic";
 import BottomNav from "../components/BottomNav";
 import { templateConfig } from "../data/templateConfig";
@@ -39,6 +41,8 @@ import {
   rsvpDefaultData,
   wishDefaultData,
   lsDefaultData,
+  videoDefaultData,
+  rundownDefaultData,
 } from "../data/schemas";
 
 export default function PublicInvitationPage() {
@@ -64,6 +68,8 @@ export default function PublicInvitationPage() {
     rsvp: rsvpDefaultData,
     wish: wishDefaultData,
     livestream: lsDefaultData,
+    video: videoDefaultData,
+    rundown: rundownDefaultData,
   });
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -139,6 +145,8 @@ export default function PublicInvitationPage() {
         rsvp: { ...prev.rsvp, ...result.data.rsvp },
         wish: { ...prev.wish, ...result.data.wish },
         livestream: { ...prev.livestream, ...result.data.livestream },
+        video: { ...prev.video, ...result.data.video },
+        rundown: { ...prev.rundown, ...result.data.rundown },
       }));
 
       setLoading(false);
@@ -258,6 +266,8 @@ export default function PublicInvitationPage() {
             {data.livestream.lsEnabled && (
               <LiveStreamingSection data={data.livestream} />
             )}
+            {data.video.videoEnabled && <VideoSection data={data.video} />}
+            {data.rundown.rundownEnabled && <RundownSection data={data.rundown} />}
             <BottomNav />
           </>
         )}

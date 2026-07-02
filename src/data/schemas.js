@@ -266,3 +266,34 @@ export const lsDefaultData = {
   instagramUrl: "",
   youtubeUrl: "",
 };
+
+export const videoFields = [
+  { key: "videoEnabled", type: "toggle", label: "Aktifkan Video" },
+  { key: "videoHeading", type: "text", label: "Judul" },
+  { key: "videoUrl", type: "text", label: "Link YouTube" },
+];
+
+export const videoDefaultData = {
+  videoEnabled: true,
+  videoHeading: "Video",
+  videoUrl: "",
+};
+
+export const rundownFields = [
+  { key: "rundownEnabled", type: "toggle", label: "Aktifkan Rundown" },
+  { key: "rundownHeading", type: "text", label: "Judul" },
+];
+
+export const rundownItemFields = [
+  { key: "rundownTime", type: "text", label: "Waktu" },
+  { key: "rundownInfo", type: "text", label: "Kegiatan" },
+];
+
+export const rundownDefaultData = {
+  rundownEnabled: true,
+  rundownHeading: "Rundown",
+  rundownItems: [
+    { rundownTime: "11:00 AM", rundownInfo: "Guest Arrival & Registration" },
+    { rundownTime: "12:00 PM", rundownInfo: "Ceremony Begins" },
+  ],
+};
