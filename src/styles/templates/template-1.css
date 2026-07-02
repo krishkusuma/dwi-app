@@ -325,3 +325,18 @@
   background-color: var(--inv-accent);
   color: var(--inv-accent-text);
 }
+
+.template-1 .invitation-livestreaming {
+  background-color: var(--inv-bg-primary);
+}
+.template-1 .invitation-ls-heading {
+  color: var(--inv-text-heading);
+}
+.template-1 .invitation-ls-content {
+  color: var(--inv-text-primary);
+}
+.template-1 .invitation-ls-button-ig,
+.template-1 .invitation-ls-button-yt {
+  background-color: var(--inv-accent);
+  color: var(--inv-accent-text);
+}

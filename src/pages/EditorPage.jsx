@@ -20,6 +20,7 @@ import FooterSection from "../components/sections/template-1/FooterSection";
 import WeddingGiftSection from "../components/sections/template-1/WeddingGiftSection";
 import RsvpSection from "../components/sections/template-1/RsvpSection";
 import WishSection from "../components/sections/template-1/WishSection";
+import LiveStreamingSection from "../components/sections/template-1/LiveStreamingSection";
 import StickyMusic from "../components/StickyMusic";
 import BottomNav from "../components/BottomNav";
 import { templateConfig } from "../data/templateConfig";
@@ -42,6 +43,7 @@ import {
   generalFields, generalDefaultData,
   rsvpFields, rsvpDefaultData,
   wishFields, wishDefaultData,
+  lsSettingsFields, lsDefaultData,
 } from "../data/schemas";
 
 // Pemetaan dari "value" dropdown ke id elemen section di preview,
@@ -58,6 +60,7 @@ const SECTION_SCROLL_TARGETS = {
   gift: "wedding-gift-section",
   rsvp: "rsvp-section",
   wish: "wish-section",
+  livestream: "livestreaming-section",
 };
 
 export default function EditorPage() {
@@ -80,6 +83,7 @@ export default function EditorPage() {
     weddingGift: wgDefaultData,
     rsvp: rsvpDefaultData,
     wish: wishDefaultData,
+    livestream: lsDefaultData,
   });
   const [loading, setLoading] = useState(true);
   const [templateId, setTemplateId] = useState(DEFAULT_TEMPLATE_ID);
@@ -204,6 +208,7 @@ export default function EditorPage() {
           weddingGift: { ...prev.weddingGift, ...result.data.weddingGift },
           rsvp: { ...prev.rsvp, ...result.data.rsvp },
           wish: { ...prev.wish, ...result.data.wish },
+          livestream: { ...prev.livestream, ...result.data.livestream },
         }));
       }
       setLoading(false);
@@ -517,6 +522,86 @@ export default function EditorPage() {
               </p>
             </>
           )}
+
+          {activeSection === "livestream" && (
+            <>
+              <h4 className="mb-4 font-medium">Live Streaming</h4>
+              {lsSettingsFields.map((field) => (
+                <FieldRenderer
+                  key={field.key}
+                  field={field}
+                  value={data.livestream[field.key]}
+                  onChange={(key, value) => handleChange("livestream", key, value)}
+                />
+              ))}
+
+              <div className="mb-3">
+                <label className="flex items-center gap-2 text-sm mb-2">
+                  <input
+                    type="checkbox"
+                    checked={data.livestream.lsChannels?.instagram || false}
+                    onChange={(e) =>
+                      setData({
+                        ...data,
+                        livestream: {
+                          ...data.livestream,
+                          lsChannels: { ...data.livestream.lsChannels, instagram: e.target.checked },
+                        },
+                      })
+                    }
+                  />
+                  Instagram Live
+                </label>
+                {data.livestream.lsChannels?.instagram && (
+                  <>
+                    <input
+                      type="text"
+                      value={data.livestream.instagramUrl}
+                      onChange={(e) => handleChange("livestream", "instagramUrl", e.target.value)}
+                      placeholder="https://instagram.com/..."
+                      className="w-full px-3 py-2 text-sm border rounded mb-1"
+                    />
+                    {!data.livestream.instagramUrl && (
+                      <p className="text-xs text-red-500 mb-2">Link Instagram wajib diisi.</p>
+                    )}
+                  </>
+                )}
+              </div>
+
+              <div className="mb-3">
+                <label className="flex items-center gap-2 text-sm mb-2">
+                  <input
+                    type="checkbox"
+                    checked={data.livestream.lsChannels?.youtube || false}
+                    onChange={(e) =>
+                      setData({
+                        ...data,
+                        livestream: {
+                          ...data.livestream,
+                          lsChannels: { ...data.livestream.lsChannels, youtube: e.target.checked },
+                        },
+                      })
+                    }
+                  />
+                  YouTube Live
+                </label>
+                {data.livestream.lsChannels?.youtube && (
+                  <>
+                    <input
+                      type="text"
+                      value={data.livestream.youtubeUrl}
+                      onChange={(e) => handleChange("livestream", "youtubeUrl", e.target.value)}
+                      placeholder="https://youtube.com/..."
+                      className="w-full px-3 py-2 text-sm border rounded mb-1"
+                    />
+                    {!data.livestream.youtubeUrl && (
+                      <p className="text-xs text-red-500 mb-2">Link YouTube wajib diisi.</p>
+                    )}
+                  </>
+                )}
+              </div>
+            </>
+          )}
         </div>
       )}
 
@@ -669,6 +754,9 @@ export default function EditorPage() {
                     <WishSection key="wish" data={data.wish} invitationId={invitationId} />
                   )}
                 </AnimatePresence>
+                {data.livestream.lsEnabled && (
+                  <LiveStreamingSection data={data.livestream} />
+                )}
                 <BottomNav />
               </>
             )}

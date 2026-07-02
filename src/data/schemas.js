@@ -251,3 +251,18 @@ export const wishDefaultData = {
   wishHeading: "Wedding Wishes",
   wishContent: "Sampaikan ucapan selamat, doa, dan lain-lain.",
 };
+
+export const lsSettingsFields = [
+  { key: "lsEnabled", type: "toggle", label: "Aktifkan Live Streaming" },
+  { key: "lsHeading", type: "text", label: "Judul" },
+  { key: "lsContent", type: "textarea", label: "Deskripsi", maxLength: 256 },
+];
+
+export const lsDefaultData = {
+  lsEnabled: true,
+  lsHeading: "Live Streaming",
+  lsContent: "Saksikan acara pernikahan kami melalui tautan di bawah ini:",
+  lsChannels: { instagram: false, youtube: false },
+  instagramUrl: "",
+  youtubeUrl: "",
+};

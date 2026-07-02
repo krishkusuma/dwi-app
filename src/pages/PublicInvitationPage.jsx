@@ -16,6 +16,7 @@ import FooterSection from "../components/sections/template-1/FooterSection";
 import WeddingGiftSection from "../components/sections/template-1/WeddingGiftSection";
 import RsvpSection from "../components/sections/template-1/RsvpSection";
 import WishSection from "../components/sections/template-1/WishSection";
+import LiveStreamingSection from "../components/sections/template-1/LiveStreamingSection";
 import StickyMusic from "../components/StickyMusic";
 import BottomNav from "../components/BottomNav";
 import { templateConfig } from "../data/templateConfig";
@@ -37,6 +38,7 @@ import {
   generalDefaultData,
   rsvpDefaultData,
   wishDefaultData,
+  lsDefaultData,
 } from "../data/schemas";
 
 export default function PublicInvitationPage() {
@@ -61,6 +63,7 @@ export default function PublicInvitationPage() {
     weddingGift: wgDefaultData,
     rsvp: rsvpDefaultData,
     wish: wishDefaultData,
+    livestream: lsDefaultData,
   });
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
@@ -135,6 +138,7 @@ export default function PublicInvitationPage() {
         weddingGift: { ...prev.weddingGift, ...result.data.weddingGift },
         rsvp: { ...prev.rsvp, ...result.data.rsvp },
         wish: { ...prev.wish, ...result.data.wish },
+        livestream: { ...prev.livestream, ...result.data.livestream },
       }));
 
       setLoading(false);
@@ -251,6 +255,9 @@ export default function PublicInvitationPage() {
                 <WishSection key="wish" data={data.wish} invitationId={invitationId} />
               )}
             </AnimatePresence>
+            {data.livestream.lsEnabled && (
+              <LiveStreamingSection data={data.livestream} />
+            )}
             <BottomNav />
           </>
         )}
