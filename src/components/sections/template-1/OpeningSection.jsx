@@ -25,6 +25,8 @@ export default function OpeningSection({ data, groomName, brideName }) {
         <>
           <video
             src={templateConfig.openingBackgroundVideo}
+            poster={templateConfig.openingBackgroundPoster}
+            preload="auto"
             autoPlay
             muted
             loop

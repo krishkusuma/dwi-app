@@ -47,6 +47,7 @@ export const templateConfig = {
   dummyQrImage: "https://remonial.com/images/qr-cover.webp",
 
   //video background
+  openingBackgroundPoster: "https://ypytpxpxektrftpeaiyi.supabase.co/storage/v1/object/public/template-assets/template-1/videobgr-white-floral-poster.webp",
   openingBackgroundVideo: "https://ypytpxpxektrftpeaiyi.supabase.co/storage/v1/object/public/template-assets/template-1/videobgr-white-floral.mp4",  
   
 };
