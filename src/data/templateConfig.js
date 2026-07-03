@@ -45,5 +45,8 @@ export const templateConfig = {
   dummyVideoUrl: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
 
   dummyQrImage: "https://remonial.com/images/qr-cover.webp",
+
+  //video background
+  openingBackgroundVideo: "https://ypytpxpxektrftpeaiyi.supabase.co/storage/v1/object/public/template-assets/template-1/videobgr-white-floral.mp4",  
   
 };
