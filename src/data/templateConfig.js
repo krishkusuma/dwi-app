@@ -8,15 +8,15 @@ export const templateConfig = {
   // Gambar dummy untuk Hero saat klien pertama kali buat undangan baru,
   // supaya langsung ada visual tanpa harus upload dulu. GANTI URL ini
   // dengan path final begitu domain produksi & asetnya sudah siap.
-  dummyHeroImage: "https://remonial.com/dummy/photo/hero-couple.webp",
+  dummyHeroImage: "https://ypytpxpxektrftpeaiyi.supabase.co/storage/v1/object/public/template-assets/template-1/groom-1.webp",
   dummyDesktopImage: "https://remonial.com/dummy/photo/hero-couple-desktop.webp",
 
   // Quote
   dummyQuoteImage: "https://remonial.com/images/quote.webp",
 
   // Mempelai (Couple) — beda gambar untuk pria & wanita
-  dummyGroomImage: "https://remonial.com/images/groom.webp",
-  dummyBrideImage: "https://remonial.com/images/bride.webp",
+  dummyGroomImage: "https://ypytpxpxektrftpeaiyi.supabase.co/storage/v1/object/public/template-assets/template-1/groom-1.webp",
+  dummyBrideImage: "https://ypytpxpxektrftpeaiyi.supabase.co/storage/v1/object/public/template-assets/template-1/bride-1.webp",
 
   // Countdown
   dummyCountdownImage: "https://remonial.com/images/countdown.webp",
@@ -30,7 +30,7 @@ export const templateConfig = {
 
   // Galeri — 5 foto berbeda
   dummyGalleryImages: [
-    "https://remonial.com/images/gallery-1.webp",
+    "https://ypytpxpxektrftpeaiyi.supabase.co/storage/v1/object/public/template-assets/template-1/groom-1.webp",
     "https://remonial.com/images/gallery-2.webp",
     "https://remonial.com/images/gallery-3.webp",
     "https://remonial.com/images/gallery-4.webp",
